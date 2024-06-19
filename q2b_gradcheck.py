@@ -30,6 +30,7 @@ def gradcheck_naive(f, x, gradient_text=""):
         # It has smaller asymptotic error than forward / backward difference
         # methods. If you are curious, check out here:
         # https://math.stackexchange.com/questions/2326181/when-to-use-forward-or-central-difference-approximations
+        # http://ufldl.stanford.edu/tutorial/supervised/DebuggingGradientChecking/
 
         # Make sure you call random.setstate(rndstate)
         # before calling f(x) each time. This will make it possible
