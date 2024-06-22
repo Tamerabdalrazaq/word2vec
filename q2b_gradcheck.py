@@ -35,7 +35,7 @@ def gradcheck_naive(f, x, gradient_text=""):
         numgrad = (f_plus_h - f_minus_h) / (2 * h)
 
         # Compare gradients
-        assert_allclose(numgrad, grad[ix], rtol=1e-3,
+        assert_allclose(numgrad, grad[ix], rtol=1e-5,
                         err_msg=f"Gradient check failed for {gradient_text}.\n"
                                 f"First gradient error found at index {ix} in the vector of gradients\n"
                                 f"Your gradient: {grad[ix]} \t Numerical gradient: {numgrad}")
