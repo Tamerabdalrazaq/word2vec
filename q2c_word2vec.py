@@ -2,11 +2,15 @@
 import random
 
 import numpy as np
-
+import math
 from helpers.utils import normalize_rows, sigmoid, get_negative_samples
-from q3a_softmax import softmax
-from q3b_gradcheck import gradcheck_naive
+from q2a_softmax import softmax
+from q2b_gradcheck import gradcheck_naive
 
+
+def P_O_C(v_c, u_index, U):
+    y_hat = np.dot(v_c, U)
+    return softmax(y_hat)
 
 def naive_softmax_loss_and_gradient(
         center_word_vec,
@@ -38,7 +42,19 @@ def naive_softmax_loss_and_gradient(
     """
 
     ### YOUR CODE HERE
-    raise NotImplementedError
+    v_c = center_word_vec
+    u_o = outside_vectors[outside_word_idx]
+    propapilities_vector = np.dot(v_c, outside_vectors)
+    propapilities_vector = softmax(propapilities_vector)
+    loss =  -1* math.log(propapilities_vector[outside_word_idx]) 
+
+    expectation = np.sum(propapilities_vector[:, np.newaxis] * outside_vectors, axis=0)
+    grad_center_vec = u_o - expectation
+
+    grad_outside_vecs = propapilities_vector[:, np.newaxis] * v_c
+    grad_outside_vecs[outside_word_idx] = (propapilities_vector[outside_word_idx] - 1) * v_c
+
+
     ### END YOUR CODE
 
     return loss, grad_center_vec, grad_outside_vecs
@@ -71,8 +87,26 @@ def neg_sampling_loss_and_gradient(
     indices = [outside_word_idx] + neg_sample_word_indices
 
     ### YOUR CODE HERE
-    raise NotImplementedError
-    ### END YOUR CODE
+    v_c = center_word_vec
+    u_o = outside_vectors[outside_word_idx]
+    uo_dot_vc = np.dot(u_o, v_c)
+    U_K = outside_vectors[indices]
+    random_loss_sum = 0
+    random_vcgradient_sum = 0
+    for k in range(K):
+        u_k = outside_vectors[indices[k]]
+        uk_prod_vc = np.dot(u_k, v_c)
+        random_loss_sum += math.log(sigmoid(-1* uk_prod_vc))
+        random_vcgradient_sum += (1 - sigmoid(-1* uk_prod_vc))*u_k
+    loss = -1*math.log(sigmoid(uo_dot_vc))  - random_loss_sum
+
+    grad_center_vec = -1* (1-sigmoid(uo_dot_vc))*u_o + random_vcgradient_sum
+
+    dot_products = np.dot(U_K, v_c)
+    sigmoid_dot_products = sigmoid(dot_products)
+    grad_outside_vecs = (1 - sigmoid_dot_products[:, np.newaxis]) * v_c
+
+
 
     return loss, grad_center_vec, grad_outside_vecs
 

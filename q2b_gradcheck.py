@@ -61,7 +61,7 @@ def test_gradcheck_basic():
 
 def your_gradcheck_test():
     # pass
-    d = 4
+    d = 3
     quad = lambda x: (np.sum(x ** d), d*(x**(d-1)))
     print("Running sanity checks...")
     gradcheck_naive(quad, np.array(123.456))       # scalar test
