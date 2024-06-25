@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def softmax(x):
     """Compute the softmax function for each row of the input x.
     It is crucial that this function is optimized for speed because
@@ -21,7 +20,8 @@ def softmax(x):
         x = x / sum_of_rows
     else:
         # Vector
-        x = np.exp(x - np.max(x))
+        x = x - np.max(x)
+        x = np.exp(x)
         x = x / np.sum(x)
 
     assert x.shape == orig_shape
@@ -66,6 +66,5 @@ def your_softmax_test():
 
 
 if __name__ == "__main__":
-    # test_softmax_basic()
-    # your_softmax_test()
-    pass
+    test_softmax_basic()
+    your_softmax_test()

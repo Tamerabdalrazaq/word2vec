@@ -3,7 +3,6 @@ import random
 import numpy as np
 from numpy.testing import assert_allclose
 
-
 def gradcheck_naive(f, x, gradient_text=""):
     """ Gradient check for a function f.
     Arguments:
@@ -15,7 +14,7 @@ def gradcheck_naive(f, x, gradient_text=""):
     rndstate = random.getstate()
     random.setstate(rndstate)
     fx, grad = f(x)  # Evaluate function value at original point
-    h = 1e-4         # Do not change this!
+    h = 1e-4   
 
     # Iterate over all indexes ix in x to check the gradient.
     it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
@@ -25,16 +24,14 @@ def gradcheck_naive(f, x, gradient_text=""):
         x_minus_h = np.copy(x)
         x_plus_h[ix] += h
         x_minus_h[ix] -= h
+
         
         random.setstate(rndstate)
         f_plus_h, _ = f(x_plus_h)
         
         random.setstate(rndstate)
         f_minus_h, _ = f(x_minus_h)
-
         numgrad = (f_plus_h - f_minus_h) / (2 * h)
-
-        # Compare gradients
         assert_allclose(numgrad, grad[ix], rtol=1e-5,
                         err_msg=f"Gradient check failed for {gradient_text}.\n"
                                 f"First gradient error found at index {ix} in the vector of gradients\n"
