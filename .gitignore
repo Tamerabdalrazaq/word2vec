@@ -1,1 +1,2 @@
-saved_params_*
+saved_params_*.npy
+saved_params_*.pickle
