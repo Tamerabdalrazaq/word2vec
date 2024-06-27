@@ -1,2 +1,5 @@
 saved_params_*.npy
 saved_state_*.pickle
+word_vectors.png
+written_solution_template.tex
+__pycache__/
